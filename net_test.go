@@ -22,7 +22,7 @@ func TestReadTill(t *testing.T) {
 		delim    byte
 	}
 
-	// readline testcases
+	// readtill testcases
 	testcases := []testcase{
 		testcase{
 			send:     []byte("Hello\nThere!"),

@@ -1,0 +1,3 @@
+// You should really write tests...
+
+package pwn

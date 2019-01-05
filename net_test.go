@@ -14,14 +14,12 @@ func init() {
 }
 
 // Test the client reading from the connection
-// using my custom ReadLine method.
-func TestReadLine(t *testing.T) {
+// using my custom ReadTill method.
+func TestReadTill(t *testing.T) {
 	type testcase struct {
-		// data for test server to send to the client
-		send []byte
-
-		// the data expected
+		send     []byte
 		expected []byte
+		delim    byte
 	}
 
 	// readline testcases
@@ -29,14 +27,17 @@ func TestReadLine(t *testing.T) {
 		testcase{
 			send:     []byte("Hello\nThere!"),
 			expected: []byte("Hello"),
+			delim:    '\n',
 		},
 		testcase{
-			send:     []byte("Hey there\n"),
-			expected: []byte("Hey there"),
+			send:     []byte("Hey there"),
+			expected: []byte("Hey"),
+			delim:    ' ',
 		},
 		testcase{
-			send:     []byte("What am i doing with my life\nnothing"),
-			expected: []byte("What am i doing with my life"),
+			send:     []byte("AAAAAAAABBBBBBBBB"),
+			expected: []byte("AAAAAAAA"),
+			delim:    'B',
 		},
 	}
 
@@ -70,8 +71,8 @@ func TestReadLine(t *testing.T) {
 			}
 			defer c.Close()
 
-			// call readline
-			output, err := c.ReadLine()
+			// call ReadTill
+			output, err := c.ReadTill(tc.delim)
 			if err != nil {
 				t.Fatal(err)
 			}

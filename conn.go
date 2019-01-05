@@ -1,14 +1,22 @@
 package pwn
 
 import (
+	"bufio"
 	"net"
 	"time"
 )
 
+// Conn is a generic stream-oriented network connection.
+// Multiple goroutines may invoke methods on a Conn simultaneously.
 type Conn struct {
 	// c is the underlying connection
 	c net.Conn
+
+	// r is the reader for the connection
+	r *bufio.Reader
 }
+
+// Below are the methods for the net.Conn interface.
 
 // Read reads data from the connection.
 // Read can be made to time out and return an Error with Timeout() == true
@@ -22,7 +30,7 @@ func (c Conn) Write(data []byte) (int, error) { return c.c.Write(data) }
 
 // Close closes the connection.
 // Any blocked Read or Write operations will be unblocked and return errors.
-func (c Conn) Close(data []byte) error { return c.c.Close() }
+func (c Conn) Close() error { return c.c.Close() }
 
 // LocalAddr returns the local network address.
 func (c Conn) LocalAddr() net.Addr { return c.c.LocalAddr() }

@@ -1,15 +1,19 @@
 package pwn
 
 import (
-	"errors"
 	"net"
 	"time"
 )
 
-var (
-	// ErrShortRead indecates a short read error.
-	ErrShortRead = errors.New("short read")
-)
+// ErrShortRead indecates a short read error.
+type ErrShortRead struct {
+	// the string to be returned by Error()
+	err string
+}
+
+func (e ErrShortRead) Error() string {
+	return e.err
+}
 
 // Conn is a generic stream-oriented network connection.
 //
@@ -83,8 +87,11 @@ func (c conn) ReadLine() ([]byte, error) {
 }
 
 // ReadTill reads till 'delim' and returns bytes read and possible error.
-func (c conn) ReadTill(delim byte) (retval []byte, err error) {
-	// read one byte at a time
+func (c conn) ReadTill(delim byte) ([]byte, error) {
+	// the final return value will be stored in here.
+	var retval []byte
+
+	// process one byte at a time
 	buf := make([]byte, 1)
 	for {
 		// read a byte
@@ -94,7 +101,7 @@ func (c conn) ReadTill(delim byte) (retval []byte, err error) {
 		}
 		// if we failed to read return an error
 		if nr < 1 {
-			return retval, ErrShortRead
+			return retval, ErrShortRead{"ReadTill: short read (n < 1)"}
 		}
 
 		// if it is equal to delim stop reading and return
@@ -105,11 +112,11 @@ func (c conn) ReadTill(delim byte) (retval []byte, err error) {
 		// copy the byte into retval
 		n := copy(retval, buf)
 		if n < len(buf) {
-			return nil, ErrShortRead
+			return nil, ErrShortRead{"ReadTill: short read (n < len(buf))"}
 		}
 	}
 
-	return retval, err
+	return retval, nil
 }
 
 // Below are the methods for the net.Conn interface.

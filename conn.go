@@ -2,6 +2,7 @@ package pwn
 
 import (
 	"net"
+	"sync"
 	"time"
 )
 
@@ -73,12 +74,32 @@ type Conn interface {
 
 	// ReadTill reads till delim and returns bytes read and possible error.
 	ReadTill(delim byte) ([]byte, error)
+
+	// MaxLen sets the maximum length for ReadTill and ReadLine.
+	MaxLen(length int)
 }
 
 // conn is the underlying struct returned by pwn.Dial etc
 type conn struct {
 	// c is the underlying connection
 	c net.Conn
+
+	// mu is used for protecting struct variables from concurrent reads / writes
+	mu sync.Mutex
+
+	// the max length for ReadLine and ReadTill.
+	maxLen int
+}
+
+func (c *conn) MaxLen(length int) {
+	// prevent panics
+	if c == nil {
+		return
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.maxLen = length
 }
 
 // ReadLine reads until '\n' and returns bytes read and possible error.
@@ -89,31 +110,24 @@ func (c conn) ReadLine() ([]byte, error) {
 // ReadTill reads till 'delim' and returns bytes read and possible error.
 func (c conn) ReadTill(delim byte) ([]byte, error) {
 	// the final return value will be stored in here.
-	var retval []byte
+	retval := make([]byte, c.maxLen)
+	// keep track of the total amount copied into retval
+	var n int
 
-	// process one byte at a time
-	buf := make([]byte, 1)
 	for {
-		// read a byte
-		nr, err := c.c.Read(buf[:])
+		// read one byte
+		b, err := ReadByte(c.c)
 		if err != nil {
 			return retval, err
 		}
-		// if we failed to read return an error
-		if nr < 1 {
-			return retval, ErrShortRead{"ReadTill: short read (n < 1)"}
+
+		// if the byte is equal to delim stop reading
+		if b == delim {
+			break
 		}
 
-		// if it is equal to delim stop reading and return
-		if buf[0] == delim {
-			return retval, err
-		}
-
-		// copy the byte into retval
-		n := copy(retval, buf)
-		if n < len(buf) {
-			return nil, ErrShortRead{"ReadTill: short read (n < len(buf))"}
-		}
+		// append the byte to retval
+		retval = append(retval, b)
 	}
 
 	return retval, nil

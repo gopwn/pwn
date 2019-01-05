@@ -1,7 +1,6 @@
 package pwn
 
 import (
-	"bufio"
 	"net"
 )
 
@@ -10,12 +9,10 @@ import (
 func Dial(network, addr string) (Conn, error) {
 	rawConn, err := net.Dial(network, addr)
 	if err != nil {
-		return Conn{}, err
+		return conn{}, err
 	}
 
-	reader := bufio.NewReader(rawConn)
-	return Conn{
+	return conn{
 		c: rawConn,
-		r: reader,
 	}, nil
 }

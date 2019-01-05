@@ -2,7 +2,9 @@
 
 package pwn
 
-import "io"
+import (
+	"io"
+)
 
 // ReadByte reads one byte from r and returns it. if reading one byte fails
 // it will return a ErrShortRead error.
@@ -21,4 +23,28 @@ func ReadByte(r io.Reader) (byte, error) {
 	}
 
 	return buf[0], nil
+}
+
+// ReadTill reads till 'delim' and returns bytes read and possible error.
+func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
+	for {
+		// read one byte
+		b, err := ReadByte(r)
+		if err != nil {
+			return ret, err
+		}
+
+		// if the byte is equal to delim stop reading
+		if b == delim {
+			break
+		}
+
+		// append the byte to ret
+		ret = append(ret, b)
+		if len(ret) >= maxLen {
+			return ret, ErrMaxLen
+		}
+	}
+
+	return ret, nil
 }

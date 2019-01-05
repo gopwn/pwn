@@ -113,29 +113,7 @@ func (c conn) ReadLine() ([]byte, error) {
 
 // ReadTill reads till 'delim' and returns bytes read and possible error.
 func (c conn) ReadTill(delim byte) ([]byte, error) {
-	// the final return value will be stored in here.
-	var retval []byte
-
-	for {
-		// read one byte
-		b, err := ReadByte(c.c)
-		if err != nil {
-			return retval, err
-		}
-
-		// if the byte is equal to delim stop reading
-		if b == delim {
-			break
-		}
-
-		// append the byte to retval
-		retval = append(retval, b)
-		if len(retval) >= c.maxLen {
-			return retval, ErrMaxLen
-		}
-	}
-
-	return retval, nil
+	return ReadTill(c.c, c.maxLen, delim)
 }
 
 // Below are the methods for the net.Conn interface.

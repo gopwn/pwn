@@ -108,7 +108,7 @@ func (c *conn) MaxLen(length int) {
 
 // ReadLine reads until '\n' and returns bytes read and possible error.
 func (c conn) ReadLine() ([]byte, error) {
-	return c.ReadTill('\n')
+	return ReadTill(c.c, c.maxLen, '\n')
 }
 
 // ReadTill reads till 'delim' and returns bytes read and possible error.

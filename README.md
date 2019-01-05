@@ -1,2 +1,1 @@
-# pwn
-pwntools for go!
+# Experimental port of pwntools for go!

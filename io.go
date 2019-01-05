@@ -2,9 +2,7 @@
 
 package pwn
 
-import (
-	"io"
-)
+import "io"
 
 // ReadByte reads one byte from r and returns it. if reading one byte fails
 // it will return a ErrShortRead error.

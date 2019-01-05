@@ -32,7 +32,7 @@ func TestReadLine(t *testing.T) {
 		},
 		testcase{
 			send:     []byte("Hey there\n"),
-			expected: []byte("Hello"),
+			expected: []byte("Hey there"),
 		},
 		testcase{
 			send:     []byte("What am i doing with my life\nnothing"),

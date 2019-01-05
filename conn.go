@@ -1,10 +1,14 @@
 package pwn
 
 import (
+	"errors"
 	"net"
 	"sync"
 	"time"
 )
+
+// ErrMaxLen indecates that the max length was reached for ReadTill
+var ErrMaxLen = errors.New("max length reached")
 
 // ErrShortRead indecates a short read error.
 type ErrShortRead struct {
@@ -110,9 +114,7 @@ func (c conn) ReadLine() ([]byte, error) {
 // ReadTill reads till 'delim' and returns bytes read and possible error.
 func (c conn) ReadTill(delim byte) ([]byte, error) {
 	// the final return value will be stored in here.
-	retval := make([]byte, c.maxLen)
-	// keep track of the total amount copied into retval
-	var n int
+	var retval []byte
 
 	for {
 		// read one byte
@@ -128,6 +130,9 @@ func (c conn) ReadTill(delim byte) ([]byte, error) {
 
 		// append the byte to retval
 		retval = append(retval, b)
+		if len(retval) >= c.maxLen {
+			return retval, ErrMaxLen
+		}
 	}
 
 	return retval, nil

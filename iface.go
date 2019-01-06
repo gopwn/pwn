@@ -1,7 +1,6 @@
 package pwn
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -17,51 +16,39 @@ type IFace struct {
 
 // Returns all ifaces with Addrs and MulticastAddrs
 func GetAllIfaceAddrs() ([]IFace, error) {
-	tmp_iface, err := net.Interfaces()
+	ifaces, err := net.Interfaces()
 	if err != nil {
 		return []IFace{}, err
 	}
 
-	IFace := []IFace{}
+	IFaces := []IFace{}
 
-	for i := 0; i < len(tmp_iface); i++ {
-		fmt.Println("I: ", i)
-		fmt.Printf("len(tmp_iface) %d\n", len(tmp_iface))
-		fmt.Printf("cap(tmp_iface) %d\n", cap(tmp_iface))
-		fmt.Println(tmp_iface[i].Addrs())
-		fmt.Println(tmp_iface[i].MulticastAddrs())
+	for i := 0; i < len(ifaces); i++ {
+		// Create a new IFaces instance inline and append it to the IFaces slice
+		IFaces = append(IFaces, IFace{
+			Index:        ifaces[i].Index,
+			MTU:          ifaces[i].MTU,
+			Name:         ifaces[i].Name,
+			HardwareAddr: ifaces[i].HardwareAddr,
+			Flags:        ifaces[i].Flags,
+		})
 
-		IFace[i].Index = tmp_iface[i].Index
-		IFace[i].MTU = tmp_iface[i].MTU
-		IFace[i].Name = tmp_iface[i].Name
-		IFace[i].HardwareAddr = tmp_iface[i].HardwareAddr
-		IFace[i].Flags = tmp_iface[i].Flags
+		// now you can add the other fields, because append grows the slice
 
-		addrs, err := tmp_iface[i].Addrs()
-		if err != nil {
-			IFace[i].Addrs = nil
-		}
+		// if there is an error, addrs will be returned as its zero value
+		// aka nil, so the "error checking" was pointless.
+		addrs, _ := ifaces[i].Addrs()
+		IFaces[i].Addrs = addrs
 
-		IFace[i].Addrs = addrs
-
-		multiAddrs, err := tmp_iface[i].MulticastAddrs()
-		if err != nil {
-			IFace[i].MulticastAddrs = nil
-		}
-
-		IFace[i].MulticastAddrs = multiAddrs
-
+		multiAddrs, _ := ifaces[i].MulticastAddrs()
+		IFaces[i].MulticastAddrs = multiAddrs
 	}
 
-	return IFace, nil
+	return IFaces, nil
 }
 
-//returns given iface
+// returns given iface
 func getIfaceAddrs() error {
 	// TODO
 	return nil
-}
-
-func main() {
-	GetAllIfaceAddrs()
 }

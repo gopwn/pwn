@@ -35,8 +35,6 @@ func TestProcesses(t *testing.T) {
 			// test comunicating with a shell
 			name: "test sh",
 			runFunc: func(t *testing.T) {
-				// i'm not sure what the output will be, i'll just let it fail
-				// then i'll change this
 				expected := []byte("Hello, world")
 				p, err := Spawn("sh")
 				if err != nil {

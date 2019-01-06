@@ -11,7 +11,7 @@ func ToBytes(t interface{}) (output []byte) {
 	case []byte:
 		output = x
 	case byte:
-		output = append(data, x)
+		output = append(output, x)
 	case rune:
 		output = []byte(string(x))
 	default:

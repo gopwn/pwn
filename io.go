@@ -3,8 +3,12 @@
 package pwn
 
 import (
+	"context"
 	"io"
 )
+
+// Default max length for the ReadTill function.
+const MaxLenDefault = 256
 
 // ReadByte reads one byte from r and returns it. if reading one byte fails
 // it will return a ErrShortRead error.
@@ -26,7 +30,12 @@ func ReadByte(r io.Reader) (byte, error) {
 }
 
 // ReadTill reads till 'delim' and returns bytes read and possible error.
+// if maxLen is <= 0 it will use MaxLenDefault
 func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
+	if maxLen <= 0 {
+		maxLen = MaxLenDefault
+	}
+
 	for {
 		// read one byte
 		b, err := ReadByte(r)
@@ -47,4 +56,9 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	}
 
 	return ret, nil
+}
+
+// ReadTillContext reads from r until maxLen delim or ctx.Done()
+func ReadTillContext(r io.Reader, maxLen int, delim byte, ctx context.Context) (ret []byte, err error) {
+	return nil, nil
 }

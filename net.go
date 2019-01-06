@@ -17,6 +17,6 @@ func Dial(network, addr string) (Conn, error) {
 	return &conn{
 		c: rawConn,
 		// the default line length to be used with conn.ReadLine
-		maxLen: 256,
+		maxLen: MaxLenDefault,
 	}, nil
 }

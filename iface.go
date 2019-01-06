@@ -1,19 +1,18 @@
 package pwn
 
 import (
-	"net"
 	"fmt"
+	"net"
 )
 
-
 type IFace struct {
-	Index	int
-	MTU 	int
-	Name 	string
-	HardwareAddr net.HardwareAddr
-	Flags 	net.Flags
-	Addrs 	[]net.Addr
-	MulticastAddrs 	[]net.Addr
+	Index          int
+	MTU            int
+	Name           string
+	HardwareAddr   net.HardwareAddr
+	Flags          net.Flags
+	Addrs          []net.Addr
+	MulticastAddrs []net.Addr
 }
 
 // Returns all ifaces with Addrs and MulticastAddrs
@@ -52,14 +51,13 @@ func GetAllIfaceAddrs() ([]IFace, error) {
 
 		IFace[i].MulticastAddrs = multiAddrs
 
-
 	}
 
 	return IFace, nil
 }
 
 //returns given iface
-func getIfaceAddrs() (error) {
+func getIfaceAddrs() error {
 	// TODO
 	return nil
 }

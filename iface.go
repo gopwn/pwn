@@ -47,8 +47,40 @@ func GetAllIfaceAddrs() ([]IFace, error) {
 	return IFaces, nil
 }
 
-// returns given iface
-func getIfaceAddrs() error {
-	// TODO
-	return nil
+// returns requested interface by name ('eth0', 'lo', etc)
+func GetIFaceByName(iface_req string) (IFace, error) {
+	iface, err := net.InterfaceByName(iface_req)
+	if err != nil {
+		return IFace{}, err
+	}
+	IFace = IFace{}	// will this give problems with the naming?
+
+	IFace.Index = iface.Index
+	IFace.MTU = iface.MTU
+	IFace.Name = iface.Name
+	IFace.HardwareAddr = iface.HardwareAddr
+	IFace.Flags = iface.Flags
+	IFace.Addrs, _ := iface.Addrs()
+	IFace.MulticastAddrs, _ := iface.MulticastAddrs()
+	
+	return IFace, nil
 }
+
+func GetIFaceByIndex(index_req int) (IFace, error) {
+	iface, err := net.InterfaceByIndex(index_req)
+	if err != nil {
+		return IFace{}, err
+	}
+	IFace = IFace{}	// will this give problems with the naming?
+
+	IFace.Index = iface.Index
+	IFace.MTU = iface.MTU
+	IFace.Name = iface.Name
+	IFace.HardwareAddr = iface.HardwareAddr
+	IFace.Flags = iface.Flags
+	IFace.Addrs, _ := iface.Addrs()
+	IFace.MulticastAddrs, _ := iface.MulticastAddrs()
+	
+	return IFace, nil
+}
+

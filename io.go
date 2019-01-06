@@ -19,7 +19,7 @@ func ReadByte(r io.Reader) (byte, error) {
 
 	// make sure we've read at least 1 byte
 	if nr < 1 {
-		return 0, ErrShortRead{"readByte: failed to read byte (nr < 1)"}
+		return 0, ErrShortRead{"ReadByte: failed to read byte (nr < 1)"}
 	}
 
 	return buf[0], nil

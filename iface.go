@@ -53,7 +53,7 @@ func GetIFaceByName(iface_req string) (IFace, error) {
 	if err != nil {
 		return IFace{}, err
 	}
-	IFace = IFace{}	// will this give problems with the naming?
+	IFace := IFace{}	// will this give problems with the naming?
 
 	IFace.Index = iface.Index
 	IFace.MTU = iface.MTU
@@ -71,7 +71,7 @@ func GetIFaceByIndex(index_req int) (IFace, error) {
 	if err != nil {
 		return IFace{}, err
 	}
-	IFace = IFace{}	// will this give problems with the naming?
+	IFace := IFace{}	// will this give problems with the naming?
 
 	IFace.Index = iface.Index
 	IFace.MTU = iface.MTU

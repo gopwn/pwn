@@ -24,17 +24,17 @@ func TestReadTill(t *testing.T) {
 
 	// readtill testcases
 	testcases := []testcase{
-		testcase{
+		{
 			send:     []byte("Hello\nThere!"),
 			expected: []byte("Hello"),
 			delim:    '\n',
 		},
-		testcase{
+		{
 			send:     []byte("Hey there"),
 			expected: []byte("Hey"),
 			delim:    ' ',
 		},
-		testcase{
+		{
 			send:     []byte("AAAAAAAABBBBBBBBB"),
 			expected: []byte("AAAAAAAA"),
 			delim:    'B',

@@ -1,0 +1,11 @@
+TODO LIST:
+
+Templates;
+Done:
+	Python2
+todo:
+	Go
+	Python3
+	PHP
+	...
+

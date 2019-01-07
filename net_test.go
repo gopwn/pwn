@@ -89,6 +89,9 @@ func TestReadTill(t *testing.T) {
 
 // get a random port from min 1024 to max 65535
 func randPort() string {
-	portInt := rand.Intn(65535 - 1024)
-	return strconv.Itoa(portInt)
+	var port int
+	for port <= 1024 {
+		port = rand.Intn(65535)
+	}
+	return strconv.Itoa(port)
 }

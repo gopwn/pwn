@@ -22,6 +22,8 @@ import (
 	}
 */
 
+// Test IFace NOTE: there is a small chance of this failing if a new interface
+// appears while this test is running
 func TestIFace(t *testing.T) {
 	// currently only test that the function can be called
 	ifaces, err := GetInterfaceAddrs()
@@ -32,12 +34,27 @@ func TestIFace(t *testing.T) {
 		t.Skip("len(ifaces) < 1")
 	}
 
-	iface, err := GetIFaceByName(ifaces[0].Name)
-	if err != nil {
-		t.Fatal(err)
-	}
+	t.Run("GetIFaceByName", func(t *testing.T) {
+		t.Parallel()
+		iface, err := GetIFaceByName(ifaces[0].Name)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	if !reflect.DeepEqual(iface, ifaces[0]) {
-		t.Fatal("iface != faces[0]")
-	}
+		if !reflect.DeepEqual(iface, ifaces[0]) {
+			t.Fatal("iface != ifaces[0]")
+		}
+	})
+
+	t.Run("GetIFaceByIndex", func(t *testing.T) {
+		t.Parallel()
+		iface, err := GetIFaceByIndex(1)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if !reflect.DeepEqual(iface, ifaces[0]) {
+			t.Fatal("iface != ifaces[0]")
+		}
+	})
 }

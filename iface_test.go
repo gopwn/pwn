@@ -6,6 +6,7 @@ import (
 )
 
 // TODO: implement mock of []net.Interface for testing
+// not that they work.
 /*
 	interfaces := []net.Interface{
 		{

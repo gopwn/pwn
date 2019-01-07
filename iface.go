@@ -21,8 +21,12 @@ func GetAllIfaceAddrs() ([]IFace, error) {
 		return []IFace{}, err
 	}
 
-	IFaces := []IFace{}
+	return getInterfaceAddrs(ifaces)
+}
 
+// the actually implementation, with an extra argument for testing
+func getInterfaceAddrs(ifaces []net.Interface) ([]IFace, error) {
+	IFaces := []IFace{}
 	for i := 0; i < len(ifaces); i++ {
 		// Create a new IFaces instance inline and append it to the IFaces slice
 		IFaces = append(IFaces, IFace{
@@ -53,7 +57,7 @@ func GetIFaceByName(iface_req string) (IFace, error) {
 	if err != nil {
 		return IFace{}, err
 	}
-	IFace := IFace{}	// will this give problems with the naming?
+	IFace := IFace{} // will this give problems with the naming?
 
 	IFace.Index = iface.Index
 	IFace.MTU = iface.MTU
@@ -62,7 +66,7 @@ func GetIFaceByName(iface_req string) (IFace, error) {
 	IFace.Flags = iface.Flags
 	IFace.Addrs, _ = iface.Addrs()
 	IFace.MulticastAddrs, _ = iface.MulticastAddrs()
-	
+
 	return IFace, nil
 }
 
@@ -71,7 +75,7 @@ func GetIFaceByIndex(index_req int) (IFace, error) {
 	if err != nil {
 		return IFace{}, err
 	}
-	IFace := IFace{}	// will this give problems with the naming?
+	IFace := IFace{} // will this give problems with the naming?
 
 	IFace.Index = iface.Index
 	IFace.MTU = iface.MTU
@@ -80,7 +84,6 @@ func GetIFaceByIndex(index_req int) (IFace, error) {
 	IFace.Flags = iface.Flags
 	IFace.Addrs, _ = iface.Addrs()
 	IFace.MulticastAddrs, _ = iface.MulticastAddrs()
-	
+
 	return IFace, nil
 }
-

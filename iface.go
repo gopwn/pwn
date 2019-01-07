@@ -15,7 +15,7 @@ type IFace struct {
 }
 
 // Returns all ifaces with Addrs and MulticastAddrs
-func GetAllIfaceAddrs() ([]IFace, error) {
+func GetInterfaceAddrs() ([]IFace, error) {
 	ifaces, err := net.Interfaces()
 	if err != nil {
 		return []IFace{}, err
@@ -52,8 +52,8 @@ func getInterfaceAddrs(ifaces []net.Interface) ([]IFace, error) {
 }
 
 // returns requested interface by name ('eth0', 'lo', etc)
-func GetIFaceByName(iface_req string) (IFace, error) {
-	iface, err := net.InterfaceByName(iface_req)
+func GetIFaceByName(name string) (IFace, error) {
+	iface, err := net.InterfaceByName(name)
 	if err != nil {
 		return IFace{}, err
 	}
@@ -70,8 +70,8 @@ func GetIFaceByName(iface_req string) (IFace, error) {
 	return IFace, nil
 }
 
-func GetIFaceByIndex(index_req int) (IFace, error) {
-	iface, err := net.InterfaceByIndex(index_req)
+func GetIFaceByIndex(index int) (IFace, error) {
+	iface, err := net.InterfaceByIndex(index)
 	if err != nil {
 		return IFace{}, err
 	}

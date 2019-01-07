@@ -60,8 +60,8 @@ func GetIFaceByName(iface_req string) (IFace, error) {
 	IFace.Name = iface.Name
 	IFace.HardwareAddr = iface.HardwareAddr
 	IFace.Flags = iface.Flags
-	IFace.Addrs, _ := iface.Addrs()
-	IFace.MulticastAddrs, _ := iface.MulticastAddrs()
+	IFace.Addrs, _ = iface.Addrs()
+	IFace.MulticastAddrs, _ = iface.MulticastAddrs()
 	
 	return IFace, nil
 }
@@ -78,8 +78,8 @@ func GetIFaceByIndex(index_req int) (IFace, error) {
 	IFace.Name = iface.Name
 	IFace.HardwareAddr = iface.HardwareAddr
 	IFace.Flags = iface.Flags
-	IFace.Addrs, _ := iface.Addrs()
-	IFace.MulticastAddrs, _ := iface.MulticastAddrs()
+	IFace.Addrs, _ = iface.Addrs()
+	IFace.MulticastAddrs, _ = iface.MulticastAddrs()
 	
 	return IFace, nil
 }

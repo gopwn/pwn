@@ -22,7 +22,7 @@ import (
 	}
 */
 
-func TestGetAllIfaceAddrs(t *testing.T) {
+func TestIFace(t *testing.T) {
 	// currently only test that the function can be called
 	ifaces, err := GetInterfaceAddrs()
 	if err != nil {

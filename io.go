@@ -3,7 +3,6 @@
 package pwn
 
 import (
-	"context"
 	"io"
 )
 
@@ -16,14 +15,9 @@ func ReadByte(r io.Reader) (byte, error) {
 	var buf [1]byte
 
 	// read into buf
-	nr, err := r.Read(buf[:])
+	_, err := io.ReadFull(r, buf[:])
 	if err != nil {
 		return 0, err
-	}
-
-	// make sure we've read at least 1 byte
-	if nr < 1 {
-		return 0, ErrShortRead{"ReadByte: failed to read byte (nr < 1)"}
 	}
 
 	return buf[0], nil
@@ -56,9 +50,4 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	}
 
 	return ret, nil
-}
-
-// ReadTillContext reads from r until maxLen delim or ctx.Done()
-func ReadTillContext(r io.Reader, maxLen int, delim byte, ctx context.Context) (ret []byte, err error) {
-	return nil, nil
 }

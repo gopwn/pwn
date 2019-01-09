@@ -51,3 +51,11 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 
 	return ret, nil
 }
+
+// copyChan uses normal io.Copy except if it errors it goes through a channel
+func copyChan(out io.Writer, in io.Reader, errChan chan error) {
+	_, err := io.Copy(out, in)
+	if err != nil {
+		errChan <- err
+	}
+}

@@ -52,7 +52,6 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	return ret, nil
 }
 
-// TLDR just supply a string or []byte
 // WriteLine writes a line to the writer
 // it will panic if it ToBytes fails to convert t to []byte
 func WriteLine(w io.Writer, t interface{}) error {

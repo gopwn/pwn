@@ -10,16 +10,6 @@ import (
 // ErrMaxLen indecates that the max length was reached for ReadTill
 var ErrMaxLen = errors.New("max length reached")
 
-// ErrShortRead indecates a short read error.
-type ErrShortRead struct {
-	// the string to be returned by Error()
-	err string
-}
-
-func (e ErrShortRead) Error() string {
-	return e.err
-}
-
 // Conn is a generic stream-oriented network connection.
 //
 // Multiple goroutines may invoke methods on a Conn simultaneously.

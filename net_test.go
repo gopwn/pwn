@@ -16,14 +16,15 @@ func init() {
 // Test the client reading from the connection
 // using my custom ReadTill method.
 func TestReadTill(t *testing.T) {
-	type testcase struct {
+	// readtill testcases
+	var testcases = []struct {
 		send     []byte
 		expected []byte
 		delim    byte
-	}
 
-	// readtill testcases
-	testcases := []testcase{
+		// the max length if not supplied default is used
+		maxLen int
+	}{
 		{
 			send:     []byte("Hello\nThere!"),
 			expected: []byte("Hello"),
@@ -38,6 +39,14 @@ func TestReadTill(t *testing.T) {
 			send:     []byte("AAAAAAAABBBBBBBBB"),
 			expected: []byte("AAAAAAAA"),
 			delim:    'B',
+		},
+		{
+			send:     []byte("foobar"),
+			expected: []byte("foo"),
+			// delim will never be reached so maxLen better work
+			delim: '\n',
+
+			maxLen: 3,
 		},
 	}
 
@@ -70,10 +79,18 @@ func TestReadTill(t *testing.T) {
 				t.Fatal(err)
 			}
 			defer c.Close()
+			if tc.maxLen != 0 {
+				c.MaxLen(tc.maxLen)
+			}
 
 			// call ReadTill
 			output, err := c.ReadTill(tc.delim)
-			if err != nil {
+
+			// error checking (very ugly please send help)
+			if tc.maxLen >= len(tc.send) && err != ErrMaxLen {
+				t.Fatalf("expected ErrMaxLen got: %v", err)
+			}
+			if err != nil && err != ErrMaxLen {
 				t.Fatal(err)
 			}
 

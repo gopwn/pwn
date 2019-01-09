@@ -103,12 +103,12 @@ func (c *conn) MaxLen(length int) {
 }
 
 // ReadLine reads until '\n' and returns bytes read and possible error.
-func (c conn) ReadLine() ([]byte, error) {
+func (c *conn) ReadLine() ([]byte, error) {
 	return ReadTill(c.c, c.maxLen, '\n')
 }
 
 // ReadTill reads till 'delim' and returns bytes read and possible error.
-func (c conn) ReadTill(delim byte) ([]byte, error) {
+func (c *conn) ReadTill(delim byte) ([]byte, error) {
 	return ReadTill(c.c, c.maxLen, delim)
 }
 
@@ -116,7 +116,7 @@ func (c conn) ReadTill(delim byte) ([]byte, error) {
 // WriteLine writes a line to the connection.
 // t can be anything convertable to []byte (see ToBytes function)
 // ToBytes will panic if it fails to convert to bytes
-func (c conn) WriteLine(t interface{}) error {
+func (c *conn) WriteLine(t interface{}) error {
 	b := ToBytes(t)
 	b = append(b, '\n')
 	_, err := c.Write(b)
@@ -128,22 +128,22 @@ func (c conn) WriteLine(t interface{}) error {
 // Read reads data from the connection.
 // Read can be made to time out and return an Error with Timeout() == true
 // after a fixed time limit; see SetDeadline and SetReadDeadline.
-func (c conn) Read(buf []byte) (int, error) { return c.c.Read(buf) }
+func (c *conn) Read(buf []byte) (int, error) { return c.c.Read(buf) }
 
 // Write writes data to the connection.
 // Write can be made to time out and return an Error with Timeout() == true
 // after a fixed time limit; see SetDeadline and SetWriteDeadline.
-func (c conn) Write(data []byte) (int, error) { return c.c.Write(data) }
+func (c *conn) Write(data []byte) (int, error) { return c.c.Write(data) }
 
 // Close closes the connection.
 // Any blocked Read or Write operations will be unblocked and return errors.
-func (c conn) Close() error { return c.c.Close() }
+func (c *conn) Close() error { return c.c.Close() }
 
 // LocalAddr returns the local network address.
-func (c conn) LocalAddr() net.Addr { return c.c.LocalAddr() }
+func (c *conn) LocalAddr() net.Addr { return c.c.LocalAddr() }
 
 // RemoteAddr returns the remote network address.
-func (c conn) RemoteAddr() net.Addr { return c.c.RemoteAddr() }
+func (c *conn) RemoteAddr() net.Addr { return c.c.RemoteAddr() }
 
 // SetDeadline sets the read and write deadlines associated
 // with the connection. It is equivalent to calling both
@@ -160,16 +160,16 @@ func (c conn) RemoteAddr() net.Addr { return c.c.RemoteAddr() }
 // the deadline after successful Read or Write calls.
 //
 // A zero value for t means I/O operations will not time out.
-func (c conn) SetDeadline(t time.Time) error { return c.c.SetDeadline(t) }
+func (c *conn) SetDeadline(t time.Time) error { return c.c.SetDeadline(t) }
 
 // SetReadDeadline sets the deadline for future Read calls
 // and any currently-blocked Read call.
 // A zero value for t means Read will not time out.
-func (c conn) SetReadDeadline(t time.Time) error { return c.c.SetReadDeadline(t) }
+func (c *conn) SetReadDeadline(t time.Time) error { return c.c.SetReadDeadline(t) }
 
 // SetWriteDeadline sets the deadline for future Write calls
 // and any currently-blocked Write call.
 // Even if write times out, it may return n > 0, indicating that
 // some of the data was successfully written.
 // A zero value for t means Write will not time out.
-func (c conn) SetWriteDeadline(t time.Time) error { return c.c.SetWriteDeadline(t) }
+func (c *conn) SetWriteDeadline(t time.Time) error { return c.c.SetWriteDeadline(t) }

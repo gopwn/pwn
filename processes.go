@@ -109,8 +109,8 @@ func interactive(p Process, in io.Reader, out, err io.Writer) error {
 	go copyChan(out, p.Stdout, errChan)
 	go copyChan(err, p.Stderr, errChan)
 
-	if e := p.Wait(); e != nil {
-		errChan <- e
+	if err := p.Wait(); err != nil {
+		errChan <- err
 	}
 
 	return <-errChan

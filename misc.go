@@ -2,9 +2,9 @@
 
 package pwn
 
-// ToBytes takes type interface{} and converts it to []byte, if it can't convert
+// Bytes takes type interface{} and converts it to []byte, if it can't convert
 // to []byte it will panic
-func ToBytes(t interface{}) (output []byte) {
+func Bytes(t interface{}) (output []byte) {
 	switch x := t.(type) {
 	case string:
 		output = []byte(x)

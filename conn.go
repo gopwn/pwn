@@ -104,23 +104,20 @@ func (c *conn) MaxLen(length int) {
 
 // ReadLine reads until '\n' and returns bytes read and possible error.
 func (c *conn) ReadLine() ([]byte, error) {
-	return ReadTill(c.c, c.maxLen, '\n')
+	return ReadTill(c, c.maxLen, '\n')
 }
 
 // ReadTill reads till 'delim' and returns bytes read and possible error.
 func (c *conn) ReadTill(delim byte) ([]byte, error) {
-	return ReadTill(c.c, c.maxLen, delim)
+	return ReadTill(c, c.maxLen, delim)
 }
 
-// TLDR just supply a string or bytes
+// TLDR just supply a string or []byte
 // WriteLine writes a line to the connection.
 // t can be anything convertable to []byte (see ToBytes function)
 // ToBytes will panic if it fails to convert to bytes
 func (c *conn) WriteLine(t interface{}) error {
-	b := ToBytes(t)
-	b = append(b, '\n')
-	_, err := c.Write(b)
-	return err
+	return WriteLine(c, t)
 }
 
 // Below are the methods for the net.Conn interface.

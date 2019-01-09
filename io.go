@@ -52,6 +52,15 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	return ret, nil
 }
 
+// TLDR just supply a string or []byte
+// WriteLine writes a line to the writer
+func WriteLine(w io.Writer, t interface{}) error {
+	b := ToBytes(t)
+	b = append(b, '\n')
+	_, err := w.Write(b)
+	return err
+}
+
 // copyChan uses normal io.Copy except if it errors it goes through a channel
 func copyChan(out io.Writer, in io.Reader, errChan chan error) {
 	_, err := io.Copy(out, in)

@@ -86,7 +86,7 @@ func (p Process) WriteLine(t interface{}) error {
 	return nil
 }
 
-// ReadLine reads until newline or timeout expiers
+// ReadLine reads until newline or timeout expires
 // TODO: implement timeout
 func (p Process) ReadLine(timeout time.Duration) ([]byte, error) {
 	b, err := ReadTill(p.Stdout, p.maxLen, '\n')

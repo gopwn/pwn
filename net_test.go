@@ -63,6 +63,10 @@ func TestReadTill(t *testing.T) {
 
 			defer l.Close()
 			serverConn, err = l.Accept()
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			_, err = serverConn.Write(tc.send)
 			if err != nil {
 				t.Fatal(err)

@@ -14,6 +14,11 @@ func TestEcho(t *testing.T) {
 	}
 
 	output, err := p.ReadLine(time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// now make sure we got what we expected
 	if !bytes.Equal(output, expected) {
 		t.Fatalf("%q != %q", output, expected)
 	}
@@ -32,6 +37,11 @@ func TestSh(t *testing.T) {
 	}
 
 	out, err := p.ReadLine(time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// now check that we got the expected output
 	if !bytes.Equal(out, expected) {
 		t.Fatalf("%q != %q", out, expected)
 	}

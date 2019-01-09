@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-// Default max length for the ReadTill function.
+// MaxLenDefault is the max length default for the ReadTill function.
 const MaxLenDefault = 256
 
 // ReadByte reads one byte from r and returns it. if reading one byte fails

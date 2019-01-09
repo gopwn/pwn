@@ -62,21 +62,8 @@ type Process struct {
 // t can be anything convertable to []byte (see ToBytes function)
 // ToBytes will panic if it fails to convert to bytes
 func (p Process) WriteLine(t interface{}) error {
-	data := ToBytes(t)
-	// add the newline, we are "WriteLine" after all!
-	data = append(data, '\n')
-
 	// write the data to the processes standard input
-	n, err := p.Stdin.Write(data)
-	if err != nil {
-		return err
-	}
-	// make sure we wrote all the data
-	if n < len(data) {
-		return io.ErrShortWrite
-	}
-
-	return nil
+	return WriteLine(p.Stdin, t)
 }
 
 // ReadLine reads until newline or timeout expires

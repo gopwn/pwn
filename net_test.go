@@ -15,7 +15,7 @@ func init() {
 
 // Test the client reading from the connection
 // using my custom ReadTill method.
-func TestReadTill(t *testing.T) {
+func TestNetReadTill(t *testing.T) {
 	// readtill testcases
 	var testcases = []struct {
 		send     []byte

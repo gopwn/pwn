@@ -23,7 +23,7 @@ func ReadByte(r io.Reader) (byte, error) {
 	return buf[0], nil
 }
 
-// ReadTill reads till 'delim' and returns bytes read and possible error.
+// ReadTill reads till 'delim' (non inclusive) and returns bytes read and possible error.
 // if maxLen is <= 0 it will use MaxLenDefault
 func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	if maxLen <= 0 {

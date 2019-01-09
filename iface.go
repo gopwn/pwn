@@ -4,6 +4,7 @@ import (
 	"net"
 )
 
+// IFace is a networking interface, expanded by more information
 type IFace struct {
 	Index          int
 	MTU            int
@@ -14,7 +15,7 @@ type IFace struct {
 	MulticastAddrs []net.Addr
 }
 
-// Returns all ifaces with Addrs and MulticastAddrs
+// GetInterfaceAddrs Returns all ifaces with Addrs and MulticastAddrs
 func GetInterfaceAddrs() ([]IFace, error) {
 	ifaces, err := net.Interfaces()
 	if err != nil {
@@ -24,7 +25,7 @@ func GetInterfaceAddrs() ([]IFace, error) {
 	return getInterfaceAddrs(ifaces)
 }
 
-// the actually implementation, with an extra argument for testing
+// the actual implementation of GetInterfaceAddrs, with an extra argument for testing
 func getInterfaceAddrs(ifaces []net.Interface) ([]IFace, error) {
 	IFaces := []IFace{}
 	for i := 0; i < len(ifaces); i++ {
@@ -51,7 +52,7 @@ func getInterfaceAddrs(ifaces []net.Interface) ([]IFace, error) {
 	return IFaces, nil
 }
 
-// returns requested interface by name ('eth0', 'lo', etc)
+// GetIFaceByName returns requested interface by name ('eth0', 'lo', etc)
 func GetIFaceByName(name string) (IFace, error) {
 	iface, err := net.InterfaceByName(name)
 	if err != nil {
@@ -70,6 +71,7 @@ func GetIFaceByName(name string) (IFace, error) {
 	return IFace, nil
 }
 
+// GetIFaceByIndex returns an interface based on its index
 func GetIFaceByIndex(index int) (IFace, error) {
 	iface, err := net.InterfaceByIndex(index)
 	if err != nil {

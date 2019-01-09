@@ -7,13 +7,6 @@ import (
 	"time"
 )
 
-type ErrTimeout struct {
-	// underlying error
-	err string
-}
-
-func (e ErrTimeout) Error() string { return e.err }
-
 // Start starts cmd and returns a Process for it
 func Start(cmd *exec.Cmd) (Process, error) {
 	// file descriptors

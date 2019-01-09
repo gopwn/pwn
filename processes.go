@@ -76,7 +76,7 @@ func (p Process) WriteLine(t interface{}) error {
 	}
 	// make sure we wrote all the data
 	if n < len(data) {
-		return ErrShortRead{"WriteLine: short read (n < len(data)"}
+		return io.ErrShortWrite
 	}
 
 	return nil

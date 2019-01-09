@@ -71,6 +71,12 @@ type Conn interface {
 
 	// MaxLen sets the maximum length for ReadTill and ReadLine.
 	MaxLen(length int)
+
+	// TLDR just supply a string or bytes
+	// WriteLine writes a line to the connection.
+	// t can be anything convertable to []byte (see ToBytes function)
+	// ToBytes will panic if it fails to convert to bytes
+	WriteLine(t interface{}) error
 }
 
 // conn is the underlying struct returned by pwn.Dial etc
@@ -104,6 +110,17 @@ func (c conn) ReadLine() ([]byte, error) {
 // ReadTill reads till 'delim' and returns bytes read and possible error.
 func (c conn) ReadTill(delim byte) ([]byte, error) {
 	return ReadTill(c.c, c.maxLen, delim)
+}
+
+// TLDR just supply a string or bytes
+// WriteLine writes a line to the connection.
+// t can be anything convertable to []byte (see ToBytes function)
+// ToBytes will panic if it fails to convert to bytes
+func (c conn) WriteLine(t interface{}) error {
+	b := ToBytes(t)
+	b = append(b, '\n')
+	_, err := c.Write(b)
+	return err
 }
 
 // Below are the methods for the net.Conn interface.

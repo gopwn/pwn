@@ -3,8 +3,12 @@
 package pwn
 
 import (
+	"errors"
 	"io"
 )
+
+// ErrMaxLen indecates that the max length was reached for ReadTill
+var ErrMaxLen = errors.New("max length reached")
 
 // MaxLenDefault is the max length default for the ReadTill function.
 const MaxLenDefault = 256
@@ -16,11 +20,7 @@ func ReadByte(r io.Reader) (byte, error) {
 
 	// read into buf
 	_, err := io.ReadFull(r, buf[:])
-	if err != nil {
-		return 0, err
-	}
-
-	return buf[0], nil
+	return buf[0], err
 }
 
 // ReadTill reads till 'delim' (non inclusive) and returns bytes read and possible error.
@@ -64,10 +64,9 @@ func WriteLine(w io.Writer, t interface{}) error {
 	return err
 }
 
-// copyChan uses normal io.Copy except if it errors it goes through a channel
+// copyChan uses normal io.Copy except errors are returned through errChan
+// and only if err != nil
 func copyChan(out io.Writer, in io.Reader, errChan chan error) {
 	_, err := io.Copy(out, in)
-	if err != nil {
-		errChan <- err
-	}
+	errChan <- err
 }

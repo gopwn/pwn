@@ -26,6 +26,7 @@ import (
 // Test IFace NOTE: there is a small chance of this failing if a new interface
 // appears while this test is running
 func TestIFace(t *testing.T) {
+	t.Parallel()
 	// currently only test that the function can be called
 	ifaces, err := GetInterfaceAddrs()
 	if err != nil {

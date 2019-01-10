@@ -93,7 +93,11 @@ func interactive(p Process, in io.Reader, out, err io.Writer) error {
 		errChan <- err
 	}
 
-	return <-errChan
+	if err := <-errChan; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // os/exec.Cmd methods

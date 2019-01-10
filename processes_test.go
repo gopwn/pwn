@@ -7,6 +7,7 @@ import (
 )
 
 func TestEcho(t *testing.T) {
+	t.Parallel()
 	expected := []byte("Hello, world!")
 	p, err := Spawn("echo", "Hello, world!")
 	if err != nil {

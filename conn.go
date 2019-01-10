@@ -1,13 +1,9 @@
 package pwn
 
 import (
-	"errors"
 	"net"
 	"sync"
 )
-
-// ErrMaxLen indecates that the max length was reached for ReadTill
-var ErrMaxLen = errors.New("max length reached")
 
 // Conn is a generic stream-oriented network connection.
 //
@@ -23,6 +19,7 @@ type Conn struct {
 	mu sync.Mutex
 }
 
+// MaxLen changes the max length for ReadLine and ReadTill in the conn
 func (c *Conn) MaxLen(length int) {
 	// prevent panics
 	if c == nil {
@@ -44,7 +41,6 @@ func (c *Conn) ReadTill(delim byte) ([]byte, error) {
 	return ReadTill(c, c.maxLen, delim)
 }
 
-// TLDR just supply a string or []byte
 // WriteLine writes a line to the Connection.
 // t can be anything convertable to []byte (see ToBytes function)
 // ToBytes will panic if it fails to convert to bytes

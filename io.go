@@ -30,7 +30,7 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 		maxLen = MaxLenDefault
 	}
 	if r == nil {
-		return errors.New("ReadTill: reader is nil")
+		return ret, errors.New("ReadTill: reader is nil")
 	}
 
 	for {

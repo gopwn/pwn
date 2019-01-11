@@ -29,6 +29,9 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	if maxLen <= 0 {
 		maxLen = MaxLenDefault
 	}
+	if r == nil {
+		return errors.New("ReadTill: reader is nil")
+	}
 
 	for {
 		// read one byte

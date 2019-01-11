@@ -59,6 +59,14 @@ func TestReadTill(t *testing.T) {
 			t.Fatalf("wanted %q got %q", tc.expected, output)
 		}
 	}
+
+	// test that readtill returns correctly on a nil reader
+	t.Run("test nil", func(t *testing.T) {
+		_, err := ReadTill(nil, 0, '\n')
+		if err != ErrNilReader {
+			t.Fatalf("expected ErrNilReader, got: %v", err)
+		}
+	})
 }
 
 // badwriter returns its own string as an error when write is called.

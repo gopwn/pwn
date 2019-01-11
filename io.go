@@ -7,8 +7,11 @@ import (
 	"io"
 )
 
-// ErrMaxLen indecates that the max length was reached for ReadTill
+// ErrMaxLen indecates that the max length was reached for ReadTill.
 var ErrMaxLen = errors.New("max length reached")
+
+// ErrNilReader indecates that a nil reader was supplied.
+var ErrNilReader = errors.New("nil reader")
 
 // MaxLenDefault is the max length default for the ReadTill function.
 const MaxLenDefault = 256
@@ -30,7 +33,7 @@ func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 		maxLen = MaxLenDefault
 	}
 	if r == nil {
-		return ret, errors.New("ReadTill: reader is nil")
+		return ret, ErrNilReader
 	}
 
 	for {

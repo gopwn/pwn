@@ -16,8 +16,8 @@ var ErrNilReader = errors.New("nil reader")
 // MaxLenDefault is the max length default for the ReadTill function.
 const MaxLenDefault = 256
 
-// ReadByte reads one byte from r and returns it. if reading one byte fails
-// it will return a ErrShortRead error.
+// ReadByte reads one byte from r and returns it,
+// if it fails it will return io.ErrUnexpectedEOF.
 func ReadByte(r io.Reader) (byte, error) {
 	var buf [1]byte
 
@@ -27,7 +27,7 @@ func ReadByte(r io.Reader) (byte, error) {
 }
 
 // ReadTill reads till 'delim' (non inclusive) and returns bytes read and possible error.
-// if maxLen is <= 0 it will use MaxLenDefault
+// if maxLen is <= 0 it will use MaxLenDefault.
 func ReadTill(r io.Reader, maxLen int, delim byte) (ret []byte, err error) {
 	if maxLen <= 0 {
 		maxLen = MaxLenDefault

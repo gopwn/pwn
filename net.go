@@ -83,15 +83,14 @@ func (c *Conn) ReadTill(delim byte) ([]byte, error) {
 }
 
 // WriteLine writes a line to the Connection.
-// t can be anything convertable to []byte (see ToBytes function)
-// ToBytes will panic if it fails to convert to bytes
+// t can be anything convertable to []byte (see Bytes function)
+// Bytes will panic if it fails to convert to []byte
 func (c *Conn) WriteLine(t interface{}) error {
 	return WriteLine(c, t)
 }
 
-// Dial creates a new network Connection using net.Dial
-// then creates a pwn.Conn wrapping it and returns it
-// MaxLineLength is by default set to 256, you can change it in the returned
+// Dial creates a new network Connection returning a Conn,
+// MaxLineLength is by default set to MaxLenDefault, you can change it in the returned
 // Conn using Conn.MaxLen(i int).
 func Dial(network, addr string) (Conn, error) {
 	rawConn, err := net.Dial(network, addr)
@@ -104,6 +103,7 @@ func Dial(network, addr string) (Conn, error) {
 		// the default line length to be used with Conn.ReadLine
 		MaxLenDefault,
 
+		// mutex to protect concurrent calls
 		sync.Mutex{},
 	}, nil
 }

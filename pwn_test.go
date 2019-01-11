@@ -66,7 +66,7 @@ func TestToBytes(t *testing.T) {
 
 			b := Bytes(tc.input)
 			if !bytes.Equal(b, tc.output) {
-				t.Fatalf("%q != %q", b, tc.output)
+				t.Fatalf("wanted %q got %q", tc.output, b)
 			}
 		})
 	}

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// TestReadTill tests the ReadTill function in io.go
+// TestReadTill testcases the ReadTill function in io.go
 func TestReadTill(t *testing.T) {
 	t.Parallel()
 	var testcases = []struct {

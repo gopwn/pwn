@@ -1,24 +1,27 @@
 package pwn
 
 import (
-	"sync"
-	"time"
 	"net"
 	"strconv"
+	"sync"
+	"time"
 )
 
-const SLEEP_TIME = time.Millisecond * 100;	// 100 milliseconds
-const MAX_PORTS = 16777214;	// this is the maximum THEORETICAL number of ports, event though
+// 100 milliseconds
+const SLEEP_TIME = time.Millisecond * 100
 
-var wg1 sync.WaitGroup;
+// this is the maximum THEORETICAL number of ports, event though
+const MAX_PORTS = 16777214
+
+var wg1 sync.WaitGroup
 
 func PortScan(host string, portFrom int, portTo int, threadCount int) []int {
-	threadsPer := (portTo - portFrom) / threadCount;
-	curPortsScanning := 0;
+	threadsPer := (portTo - portFrom) / threadCount
+	curPortsScanning := 0
 	var openPorts []int
 	openPorts = make([]int, 0, MAX_PORTS)
 	for x := 0; x < threadsPer; x++ {
-		go scanRange(host, curPortsScanning, curPortsScanning + threadsPer, &openPorts)
+		go scanRange(host, curPortsScanning, curPortsScanning+threadsPer, &openPorts)
 		curPortsScanning += threadsPer
 	}
 	wg1.Wait()
@@ -35,7 +38,7 @@ func scanRange(host string, portFrom int, portTo int, resultBuff *[]int) {
 		if err == nil {
 			*resultBuff = append(*resultBuff, x)
 		}
-		if x % 5 == 0 {
+		if x%5 == 0 {
 			// for every five connections tried, try a different
 			// range for SLEEP_TIME
 			time.Sleep(SLEEP_TIME)

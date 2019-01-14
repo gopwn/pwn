@@ -88,10 +88,3 @@ func WriteLine(w io.Writer, t interface{}) error {
 	_, err := w.Write(b)
 	return err
 }
-
-// copyChan uses normal io.Copy except errors are returned through errChan
-// and only if err != nil
-func copyChan(out io.Writer, in io.Reader, errChan chan error) {
-	_, err := io.Copy(out, in)
-	errChan <- err
-}

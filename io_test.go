@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io"
 	"testing"
-	"time"
 )
 
 // TestReadTill testcases the ReadTill function in io.go
@@ -74,46 +73,4 @@ type badReader string
 
 func (b badReader) Read([]byte) (int, error) {
 	return 0, errors.New(string(b))
-}
-
-func Test_copyChan(t *testing.T) {
-
-	var testcases = []struct {
-		wantOut string
-		in      io.Reader
-		errChan chan error
-		wantErr string
-	}{
-		{
-			in:      bytes.NewBufferString("hello"),
-			errChan: make(chan error),
-			wantOut: "hello",
-
-			// we don't want an error.
-			wantErr: "",
-		},
-		{
-			in:      badReader("bad reader"),
-			errChan: make(chan error),
-			wantOut: "",
-			wantErr: "bad reader",
-		},
-	}
-	for _, tc := range testcases {
-		out := new(bytes.Buffer)
-		go copyChan(out, tc.in, tc.errChan)
-		// if we expected the error then its okay
-		select {
-		case err := <-tc.errChan:
-			if err != nil && err.Error() != tc.wantErr {
-				t.Fatal(err)
-			}
-		case <-time.After(time.Second):
-			break
-		}
-
-		if gotOut := out.String(); gotOut != tc.wantOut {
-			t.Errorf("copyChan() = %v, want %v", gotOut, tc.wantOut)
-		}
-	}
 }

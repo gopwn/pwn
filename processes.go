@@ -86,6 +86,7 @@ func (p Process) Interactive() error {
 func interactive(p Process, in io.Reader, out, err io.Writer) error {
 	errChan := make(chan error)
 	// if we don't close the channel then its possible to leak goroutines
+	// (sending on a nil channel blocks forever)
 	defer close(errChan)
 
 	go copyChan(p.Stdin, in, errChan)
@@ -96,7 +97,7 @@ func interactive(p Process, in io.Reader, out, err io.Writer) error {
 		return err
 	}
 
-	if err := <-errChan; err != nil {
+	for err := <-errChan; err != nil; {
 		return err
 	}
 

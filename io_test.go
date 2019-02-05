@@ -68,7 +68,7 @@ func TestReadTill(t *testing.T) {
 	})
 }
 
-// badwriter returns its own string as an error when write is called.
+// badReader returns its own string as an error when read is called.
 type badReader string
 
 func (b badReader) Read([]byte) (int, error) {

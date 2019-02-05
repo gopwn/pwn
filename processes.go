@@ -1,6 +1,7 @@
 package pwn
 
 import (
+	"context"
 	"io"
 	"os"
 	"os/exec"
@@ -28,7 +29,7 @@ func Start(cmd *exec.Cmd) (Process, error) {
 		return Process{}, err
 	}
 	return Process{
-		cmd:    cmd,
+		Cmd:    cmd,
 		Stdin:  stdin,
 		Stdout: stdout,
 		Stderr: stderr,
@@ -47,7 +48,7 @@ func Spawn(path string, args ...string) (Process, error) {
 // It has the methods of a os.Process and os.Cmd
 type Process struct {
 	// the underlying cmd
-	cmd *exec.Cmd
+	*exec.Cmd
 
 	// file descriptors we can manipulate
 	Stdin  io.WriteCloser
@@ -66,10 +67,10 @@ func (p Process) WriteLine(t interface{}) error {
 	return WriteLine(p.Stdin, t)
 }
 
-// ReadLine reads until newline or timeout expires
-// TODO: implement timeout
-func (p Process) ReadLine(timeout time.Duration) ([]byte, error) {
-	b, err := ReadTill(p.Stdout, p.maxLen, '\n')
+// ReadLine reads until newline.
+func (p Process) ReadLine(d time.Duration) ([]byte, error) {
+	ctx, _ := context.WithTimeout(context.Background(), d)
+	b, err := ReadTillContext(p.Stdout, p.maxLen, '\n', ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -85,76 +86,22 @@ func (p Process) Interactive() error {
 // the actual implementation of Process.Interactive
 func interactive(p Process, in io.Reader, out, err io.Writer) error {
 	// Make it interactive
-	go io.Copy(p.Stdin, in)
-	go io.Copy(out, p.Stdout)
-	go io.Copy(err, p.Stderr)
+	go func() {
+		defer p.Stdin.Close()
+		io.Copy(p.Stdin, in)
+	}()
+
+	go func() {
+		defer p.Stdout.Close()
+		io.Copy(out, p.Stdout)
+	}()
+
+	go func() {
+		defer p.Stderr.Close()
+		io.Copy(err, p.Stderr)
+	}()
 
 	// Wait for the process to exit
-	return p.Wait()
+	_, e := p.Cmd.Process.Wait()
+	return e
 }
-
-// os/exec.Cmd methods
-
-// StdinPipe returns a pipe that will be connected to the command's
-// standard input when the command starts.
-// The pipe will be closed automatically after Wait sees the command exit.
-// A caller need only call Close to force the pipe to close sooner.
-// For example, if the command being run will not exit until standard input
-// is closed, the caller must close the pipe.
-func (p *Process) StdinPipe() (io.WriteCloser, error) { return p.cmd.StdinPipe() }
-
-// StderrPipe returns a pipe that will be connected to the command's
-// standard error when the command starts.
-//
-// Wait will close the pipe after seeing the command exit, so most callers
-// need not close the pipe themselves; however, an implication is that
-// it is incorrect to call Wait before all reads from the pipe have completed.
-// For the same reason, it is incorrect to use Run when using StderrPipe.
-// See the StdoutPipe example for idiomatic usage.
-func (p *Process) StderrPipe() (io.ReadCloser, error) { return p.cmd.StderrPipe() }
-
-// StdoutPipe returns a pipe that will be connected to the command's
-// standard output when the command starts.
-//
-// Wait will close the pipe after seeing the command exit, so most callers
-// need not close the pipe themselves; however, an implication is that
-// it is incorrect to call Wait before all reads from the pipe have completed.
-// For the same reason, it is incorrect to call Run when using StdoutPipe.
-// See the example for idiomatic usage.
-func (p *Process) StdoutPipe() (io.ReadCloser, error) { return p.cmd.StdoutPipe() }
-
-// Wait waits for the command to exit and waits for any copying to
-// stdin or copying from stdout or stderr to complete.
-//
-// The command must have been started by Start.
-//
-// The returned error is nil if the command runs, has no problems
-// copying stdin, stdout, and stderr, and exits with a zero exit
-// status.
-//
-// If the command fails to run or doesn't complete successfully, the
-// error is of type *ExitError. Other error types may be
-// returned for I/O problems.
-//
-// If any of c.Stdin, c.Stdout or c.Stderr are not an *os.File, Wait also waits
-// for the respective I/O loop copying to or from the process to complete.
-//
-// Wait releases any resources associated with the Cmd.
-// NOTE: this is the Wait method for cmd.Wait NOT cmd.Process.Wait
-func (p *Process) Wait() error { return p.cmd.Wait() }
-
-// os.Process methods
-
-// Kill causes the Process to exit immediately. Kill does not wait until
-// the Process has actually exited. This only kills the Process itself,
-// not any other processes it may have started.
-func (p *Process) Kill() error { return p.cmd.Process.Kill() }
-
-// Release releases any resources associated with the Process p,
-// rendering it unusable in the future.
-// Release only needs to be called if Wait is not.
-func (p *Process) Release() error { return p.cmd.Process.Release() }
-
-// Signal sends a signal to the Process.
-// Sending Interrupt on Windows is not implemented.
-func (p *Process) Signal(sig os.Signal) error { return p.cmd.Process.Signal(sig) }

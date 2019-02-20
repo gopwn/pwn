@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"sync"
 	"time"
 )
 
@@ -83,25 +84,42 @@ func (p Process) Interactive() error {
 	return interactive(p, os.Stdin, os.Stdout, os.Stderr)
 }
 
-// the actual implementation of Process.Interactive
+// the actual implementation of Process.Interactive,
+// there is a data race issue here because a goroutine is possible to hang
+// around after the process has exited. but i need to call 'close' on every file
+// descriptor or else the underlying process will never get EOF.
 func interactive(p Process, in io.Reader, out, err io.Writer) error {
+	var wg sync.WaitGroup
+	wg.Add(3)
 	// Make it interactive
 	go func() {
-		defer p.Stdin.Close()
+		defer func() {
+			wg.Done()
+			p.Stdin.Close()
+		}()
 		io.Copy(p.Stdin, in)
 	}()
 
 	go func() {
-		defer p.Stdout.Close()
+		defer func() {
+			wg.Done()
+			p.Stdout.Close()
+		}()
 		io.Copy(out, p.Stdout)
 	}()
 
 	go func() {
-		defer p.Stderr.Close()
+		defer func() {
+			p.Stderr.Close()
+			wg.Done()
+		}()
 		io.Copy(err, p.Stderr)
 	}()
 
 	// Wait for the process to exit
 	_, e := p.Cmd.Process.Wait()
+
+	// wait for the goroutines
+	wg.Wait()
 	return e
 }

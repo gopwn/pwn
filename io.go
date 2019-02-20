@@ -52,7 +52,7 @@ func ReadTillContext(r io.Reader, maxLen int, delim byte,
 	for {
 		select {
 		case <-ctx.Done():
-			return ret, err
+			return ret, context.Canceled
 		default:
 		}
 

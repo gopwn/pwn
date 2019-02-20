@@ -2,15 +2,18 @@ package pwn
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"io"
+	"strings"
 	"testing"
+	"time"
 )
 
 // TestReadTill testcases the ReadTill function in io.go
 func TestReadTill(t *testing.T) {
 	t.Parallel()
-	var testcases = []struct {
+	tests := []struct {
 		// expected input and expecteds
 		input    []byte
 		expected []byte
@@ -45,7 +48,7 @@ func TestReadTill(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testcases {
+	for _, tc := range tests {
 		r := bytes.NewBuffer(tc.input)
 		output, err := ReadTill(r, tc.maxLen, tc.delim)
 		if err != nil && err != io.EOF {
@@ -68,7 +71,39 @@ func TestReadTill(t *testing.T) {
 	})
 }
 
-// badwriter returns its own string as an error when write is called.
+// Test context cancelation working correctly.
+func TestReadTillContext(t *testing.T) {
+	r := sleepyReader{
+		Reader: strings.NewReader("hello context!\n"),
+		delay:  100 * time.Millisecond,
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		time.Sleep(10 * time.Millisecond)
+		cancel()
+	}()
+
+	_, err := ReadTillContext(r, 0, '\n', ctx)
+	if err != context.Canceled {
+		t.Fatalf("wanted %q; got %v", context.Canceled, err)
+	}
+}
+
+// sleepyReader delays for a set duration before every read call.
+type sleepyReader struct {
+	// How long to delay on every Read call.
+	delay time.Duration
+
+	// Where to read from
+	io.Reader
+}
+
+func (s sleepyReader) Read(buf []byte) (int, error) {
+	time.Sleep(s.delay)
+	return s.Reader.Read(buf)
+}
+
+// badReader returns its own string as an error when read is called.
 type badReader string
 
 func (b badReader) Read([]byte) (int, error) {

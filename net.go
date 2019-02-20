@@ -56,7 +56,7 @@ type Conn struct {
 	// the max length for ReadLine and ReadTill.
 	maxLen int
 
-	// mu is used for protecting struct variables from concurrent reads / writes
+	// mu is used for protecting maxLen from concurrent reads / writes
 	mu sync.Mutex
 }
 

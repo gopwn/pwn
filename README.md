@@ -24,6 +24,6 @@ https://godoc.org/github.com/gopwn/pwn
 ## Contributors
 
 - [Ulisse Mini](https://github.com/UlisseMini) - creator and maintainer
-- [Sain] (https://github.com/Sain98)           - iface.go and iface\_test.go
-- [Matt146] (https://github.com/Matt146)       - cmd/scan/scan.go
+- [Sain](https://github.com/Sain98)           - iface.go and iface\_test.go
+- [Matt146](https://github.com/Matt146)       - cmd/scan/scan.go
 

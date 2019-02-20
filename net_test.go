@@ -4,11 +4,22 @@ import (
 	"math/rand"
 	"net"
 	"strconv"
+	"testing"
 	"time"
+
+	"github.com/golang/net/nettest"
 )
 
 func init() {
 	rand.Seed(time.Now().Unix())
+}
+
+// TestNet uses the nettest package to test that pwn.Conn works
+// testing readtill is pointless since io_test already covers it as long
+// as it has a valid reader.
+func TestNet(t *testing.T) {
+	t.Parallel()
+	nettest.TestConn(t, mp)
 }
 
 // mp connects a pwn.Listener with a pwn.Dialer

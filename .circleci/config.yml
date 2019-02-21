@@ -2,13 +2,6 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
-test:
-  pre:
-    - go get github.com/mattn/goveralls
-  override:
-    - go test -v -cover -race -coverprofile=/home/ubuntu/coverage.out
-  post:
-    - goveralls -coverprofile=/home/ubuntu/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
 
 jobs:
   build:
@@ -32,3 +25,6 @@ jobs:
       - run: GO111MODULE=on go mod download
       - run: go get -v -t -d ./...
       - run: go test -v ./...
+      - run: go get github.com/mattn/goveralls
+      - run: go test -v -cover -race -coverprofile=/home/ubuntu/coverage.out
+      - run: goveralls -coverprofile=/home/ubuntu/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN

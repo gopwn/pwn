@@ -10,7 +10,7 @@ https://godoc.org/github.com/gopwn/pwn
 
 ## Contributing
 
-1. Fork it (<https://github.com/UlisseMini/pwn/fork>)
+1. Fork it (<https://github.com/gopwn/pwn/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

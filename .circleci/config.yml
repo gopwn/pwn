@@ -25,6 +25,10 @@ jobs:
       #- run: go test -race -coverprofile=coverage.txt -covermode=atomic
       #- run: bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
       - run: GO111MODULE=on go mod download
+      - run: go get golang.org/x/tools/cmd/cover
+      - run: go get github.com/mattn/goveralls
+      - run: go test -v -covermode=count -coverprofile=coverage.out
+      - run: goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
       - run: go get -v -t -d ./...
       - run: go test -v ./...
         #- codecov/upload:

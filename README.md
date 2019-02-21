@@ -1,3 +1,4 @@
+[![go-doc](https://godoc.org/github.com/gopwn/pwn?status.svg)](https://godoc.org/github.com/gopwn/pwn) [![Go Report Card](https://goreportcard.com/badge/github.com/gopwn/pwn)](https://goreportcard.com/report/github.com/gopwn/pwn) [![Release](https://img.shields.io/github/release/gopwn/pwn.svg?style=flat-square)](https://github.com/gopwn/pwn/releases/latest)
 # pwn
 > pwntools for go!<br>
 
@@ -19,3 +20,4 @@ https://godoc.org/github.com/gopwn/pwn
 ## Contributors
 
 - [Ulisse Mini](https://github.com/UlisseMini) - creator and maintainer
+- [KFBI1706](https://github.com/KFBI1706) - creator and maintainer

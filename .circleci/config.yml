@@ -24,6 +24,7 @@ jobs:
       - checkout
 
       # specify any bash command here prefixed with `run: `
+      - run: go test -race -coverprofile=coverage.txt -covermode=atomic
       - run: bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
       - run: GO111MODULE=on go mod download
       - run: go get -v -t -d ./...

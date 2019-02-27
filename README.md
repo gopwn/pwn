@@ -10,6 +10,7 @@ Currently pwntools is in *beta* if you want to install it you can use go-get
 https://godoc.org/github.com/gopwn/pwn
 
 ## Contributing
+[Join our discord](https://discord.gg/QHd3nQQ)
 
 1. Fork it (<https://github.com/gopwn/pwn/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)

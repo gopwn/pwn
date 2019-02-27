@@ -29,3 +29,6 @@ jobs:
       - run: go test -v ./...
       - run: go get github.com/mattn/goveralls
       - run: go test -v -cover -race -coverprofile=coverage.out ./...
+
+      - codecov/upload:
+          file: coverage.out

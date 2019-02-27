@@ -31,4 +31,4 @@ jobs:
       - run: go test -v -cover -race -coverprofile=coverage.out ./...
 
       - codecov/upload
-      file: coverage.out
+        file: coverage.out

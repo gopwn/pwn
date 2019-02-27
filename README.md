@@ -4,7 +4,7 @@
 [![codecov.io](https://codecov.io/github/gopwn/pwn/coverage.svg?branch=master)](https://codecov.io/github/gopwn/pwn?branch=master) 
 [![Join our discord!](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/QHd3nQQ)
 # pwn
-[Join our discord!](https://discord.gg/QHd3nQQ)
+> pwntools for go!
 
 ## Installation
 Currently pwntools is in *beta* if you want to install it you can use go-get

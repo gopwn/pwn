@@ -1,4 +1,8 @@
-[![go-doc](https://godoc.org/github.com/gopwn/pwn?status.svg)](https://godoc.org/github.com/gopwn/pwn)[![Go Report Card](https://goreportcard.com/badge/github.com/gopwn/pwn)](https://goreportcard.com/report/github.com/gopwn/pwn)[![CircleCI](https://circleci.com/gh/gopwn/pwn/tree/master.svg?style=svg)](https://circleci.com/gh/gopwn/pwn/tree/master)[![codecov.io](https://codecov.io/github/gopwn/pwn/coverage.svg?branch=master)](https://codecov.io/github/gopwn/pwn?branch=master)
+[![go-doc](https://godoc.org/github.com/gopwn/pwn?status.svg)](https://godoc.org/github.com/gopwn/pwn)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gopwn/pwn)](https://goreportcard.com/report/github.com/gopwn/pwn)
+[![CircleCI](https://circleci.com/gh/gopwn/pwn/tree/master.svg?style=svg)](https://circleci.com/gh/gopwn/pwn/tree/master)
+[![codecov.io](https://codecov.io/github/gopwn/pwn/coverage.svg?branch=master)](https://codecov.io/github/gopwn/pwn?branch=master) 
+[![Join our discord!](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/QHd3nQQ)
 # pwn
 [Join our discord!](https://discord.gg/QHd3nQQ)
 
